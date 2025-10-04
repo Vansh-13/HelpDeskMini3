@@ -1,0 +1,142 @@
+/* TicketPage.css */
+
+.ticket-page {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f3f4f6;
+}
+
+.ticket-card {
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 25px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ticket-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e40af;
+  margin: 0;
+}
+
+.status-badge {
+  padding: 6px 14px;
+  border-radius: 14px;
+  font-weight: 600;
+  font-size: 13px;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.status-badge.open { background-color: #10b981; }
+.status-badge.pending { background-color: #f59e0b; }
+.status-badge.closed { background-color: #ef4444; }
+
+.ticket-desc {
+  font-size: 15px;
+  color: #374151;
+  line-height: 1.6;
+}
+
+.ticket-meta {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.sla-card, .priority-card {
+  padding: 10px 14px;
+  border-radius: 12px;
+  background-color: #f3f4f6;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.sla-card.sla-exceeded { background-color: #fee2e2; color: #b91c1c; }
+
+.update-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 360px; /* slightly wider form */
+}
+
+.update-form select,
+.update-form input {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  outline: none;
+}
+
+.update-form button {
+  padding: 12px 0;
+  border-radius: 25px;
+  border: none;
+  background-color: #2563eb;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.update-form button:hover { background-color: #1e40af; }
+
+.timeline-section, .comments-section {
+  /* Fully expanded sections, no fixed height */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.timeline li {
+  font-size: 14px;
+  padding: 6px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.comment-card {
+  font-size: 14px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  background-color: #f9fafb;
+  border-radius: 12px;
+}
+
+.comment-form textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  outline: none;
+  resize: vertical;
+}
+
+.comment-form button {
+  margin-top: 10px;
+  padding: 12px 0;
+  border-radius: 25px;
+  border: none;
+  background-color: #2563eb;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.comment-form button:hover { background-color: #1e40af; }
