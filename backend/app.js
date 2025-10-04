@@ -1,4 +1,3 @@
-// app.js
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -11,10 +10,9 @@ const ticketRoutes = require('./routes/tickets');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-// Proper CORS setup for Netlify frontend
+// CORS setup
 app.use(cors({
-  origin: 'https://helpdsk.netlify.app', // Your Netlify frontend URL
+  origin: 'https://help-dsk.netlify.app', // Your frontend URL
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -23,7 +21,7 @@ app.use(cors({
 // Handle preflight requests for all routes
 app.options('*', cors());
 
-
+// Body parser
 app.use(express.json());
 
 // MongoDB connection
