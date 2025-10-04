@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import './Auth.css';
-
+const API_URL = 'https://help-desk-mini3-o8fu-ihwkb1dvc-vansh-13s-projects.vercel.app/api';
 export default function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -19,7 +19,7 @@ export default function LoginPage() {
     }
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const res = await axios.post(`${API_URL}/auth/login`, { email, password });
       localStorage.setItem('token', res.data.token);
       toast.success('Login successful!');
       navigate('/tickets');

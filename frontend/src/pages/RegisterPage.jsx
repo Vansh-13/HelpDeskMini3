@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import './Auth.css';
-
+const API_URL = 'https://help-desk-mini3-o8fu-ihwkb1dvc-vansh-13s-projects.vercel.app/api';
 export default function RegisterPage() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -21,7 +21,7 @@ export default function RegisterPage() {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/auth/register', { username, email, password, role });
+      await axios.post(`${API_URL}/auth/register`, { username, email, password, role });
       toast.success('User registered successfully! Please login.');
       navigate('/login');
     } catch (err) {
