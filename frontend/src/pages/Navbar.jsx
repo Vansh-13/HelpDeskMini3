@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function Navbar() {
   const token = localStorage.getItem('token');
@@ -9,18 +9,15 @@ export default function Navbar() {
     user = null;
   }
 
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [mobileMenu, setMobileMenu] = useState(false);
-  const dropdownRef = useRef();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  const toggleDropdown = () => setIsOpen(!isOpen);
 
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowDropdown(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const handleLogout = () => {
@@ -32,172 +29,121 @@ export default function Navbar() {
     <nav style={navStyle}>
       <div style={logoStyle}>HelpDesk Mini</div>
 
-      {/* Hamburger button for mobile */}
-      <div style={hamburgerStyle} onClick={() => setMobileMenu(prev => !prev)}>
-        <div style={barStyle}></div>
-        <div style={barStyle}></div>
-        <div style={barStyle}></div>
-      </div>
-
-      <div style={{ ...linksContainer, ...(mobileMenu ? mobileLinksMobileStyle : linksDesktopStyle) }}>
-        <a href="/tickets" style={linkStyle}>Tickets</a>
-        <a href="/tickets/new" style={linkStyle}>New Ticket</a>
-
-        {user ? (
-          <div style={{ position: 'relative' }} ref={dropdownRef}>
-            <div 
-              style={profileStyle} 
-              onClick={() => setShowDropdown(prev => !prev)}
-              title={`Logged in as ${user.username}`}
-            >
-              <span style={avatarStyle}>{user.username[0].toUpperCase()}</span>
-              <span>{user.username}</span>
-            </div>
-
-            {showDropdown && (
-              <div style={dropdownStyle}>
-                <button onClick={handleLogout} style={dropdownBtnStyle}>Logout</button>
-              </div>
-            )}
+      {isMobile ? (
+        <>
+          <div style={hamburgerStyle} onClick={toggleDropdown}>
+            <div style={bar}></div>
+            <div style={bar}></div>
+            <div style={bar}></div>
           </div>
-        ) : (
-          <>
-            <a href="/login" style={linkStyle}>Login</a>
-            <a href="/register" style={linkStyle}>Register</a>
-          </>
-        )}
-      </div>
+
+          {isOpen && (
+            <div style={dropdownStyle}>
+              <a href="/tickets" style={linkStyle}>Tickets</a>
+              <a href="/tickets/new" style={linkStyle}>New Ticket</a>
+              {user ? (
+                <>
+                  <span style={userStyle}>{user.username}</span>
+                  <button onClick={handleLogout} style={logoutBtnStyle}>Logout</button>
+                </>
+              ) : (
+                <>
+                  <a href="/login" style={linkStyle}>Login</a>
+                  <a href="/register" style={linkStyle}>Register</a>
+                </>
+              )}
+            </div>
+          )}
+        </>
+      ) : (
+        <div style={linksContainer}>
+          <a href="/tickets" style={linkStyle}>Tickets</a>
+          <a href="/tickets/new" style={linkStyle}>New Ticket</a>
+          {user ? (
+            <>
+              <span style={userStyle}>{user.username}</span>
+              <button onClick={handleLogout} style={logoutBtnStyle}>Logout</button>
+            </>
+          ) : (
+            <>
+              <a href="/login" style={linkStyle}>Login</a>
+              <a href="/register" style={linkStyle}>Register</a>
+            </>
+          )}
+        </div>
+      )}
     </nav>
   );
 }
 
-// Styles
 const navStyle = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
   padding: '12px 24px',
-  backgroundColor: 'rgba(30, 41, 59, 0.9)',
-  backdropFilter: 'blur(12px)',
-  boxShadow: '0 6px 18px rgba(0,0,0,0.3)',
-  fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-  position: 'sticky',
-  top: 0,
-  zIndex: 1000,
-  flexWrap: 'wrap'
+  backgroundColor: '#1e293b',
+  color: '#f3f4f6',
+  position: 'relative',
 };
 
 const logoStyle = {
-  fontWeight: '800',
-  fontSize: '24px',
-  color: '#f3f4f6',
-  letterSpacing: '1.5px',
+  fontFamily: "'Brush Script MT', cursive",
+  fontWeight: '700',
+  fontSize: '28px',
+  color: '#3b82f6',
 };
 
-const linksContainer = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '16px',
-};
-
-// Desktop links style
-const linksDesktopStyle = {
-  flexDirection: 'row',
-};
-
-// Mobile menu style
-const mobileLinksMobileStyle = {
-  flexDirection: 'column',
-  width: '100%',
-  marginTop: '12px',
-  backgroundColor: 'rgba(30,41,59,0.95)',
-  borderRadius: '8px',
-  padding: '12px',
-  gap: '12px',
-};
-
-// Hamburger
 const hamburgerStyle = {
-  display: 'none', // default hidden
+  display: 'flex',
   flexDirection: 'column',
   cursor: 'pointer',
   gap: '4px',
 };
 
-// Hamburger bars
-const barStyle = {
-  width: '24px',
+const bar = {
+  width: '25px',
   height: '3px',
   backgroundColor: '#f3f4f6',
-  borderRadius: '2px'
+  borderRadius: '2px',
 };
 
-// Show hamburger on small devices
-if (window.innerWidth < 768) {
-  hamburgerStyle.display = 'flex';
-}
+const linksContainer = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '20px',
+};
+
+const dropdownStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  position: 'absolute',
+  top: '60px',
+  right: '24px',
+  backgroundColor: '#1e293b',
+  padding: '12px',
+  borderRadius: '8px',
+  boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+  zIndex: 10,
+};
 
 const linkStyle = {
   color: '#f3f4f6',
   fontWeight: '500',
-  padding: '8px 14px',
-  borderRadius: '8px',
   textDecoration: 'none',
-  cursor: 'pointer',
+  padding: '6px 12px',
+  borderRadius: '6px',
   transition: 'all 0.25s ease',
-  userSelect: 'none',
+  cursor: 'pointer',
 };
 
-const profileStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '10px',
-  padding: '6px 14px',
-  borderRadius: '12px',
-  backgroundColor: 'rgba(255,255,255,0.15)',
+const userStyle = { fontWeight: '600', color: '#fcd34d', padding: '6px 12px' };
+
+const logoutBtnStyle = {
+  backgroundColor: '#ef4444',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '6px',
+  padding: '6px 12px',
   cursor: 'pointer',
   fontWeight: '600',
-  color: '#f3f4f6',
-  transition: 'all 0.3s ease',
-};
-
-const avatarStyle = {
-  width: '36px',
-  height: '36px',
-  borderRadius: '50%',
-  backgroundColor: '#2563eb',
-  color: 'white',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  fontSize: '18px',
-  fontWeight: '700',
-  transition: 'all 0.3s ease'
-};
-
-const dropdownStyle = {
-  position: 'absolute',
-  top: '48px',
-  right: 0,
-  backgroundColor: 'rgba(30, 41, 59, 0.95)',
-  backdropFilter: 'blur(10px)',
-  boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
-  borderRadius: '12px',
-  padding: '12px',
-  minWidth: '160px',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '8px',
-  zIndex: 2000,
-};
-
-const dropdownBtnStyle = {
-  border: 'none',
-  backgroundColor: '#ef4444',
-  color: 'white',
-  padding: '10px 16px',
-  borderRadius: '8px',
-  fontWeight: '700',
-  cursor: 'pointer',
-  transition: 'all 0.3s ease',
 };
