@@ -127,7 +127,8 @@ const app = express();
 // Allowed frontends
 const allowedOrigins = [
   'https://helpdsk.netlify.app',
-  'https://helpdskapp.netlify.app' // your current frontend
+
+ ' https://helpdeskmini2.netlify.app'
 ];
 
 // Middlewares
