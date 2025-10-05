@@ -85,6 +85,36 @@
 
 // module.exports = app; // Export app only
 
+// const express = require('express');
+// const cors = require('cors');
+// require('dotenv').config();
+
+// const authRoutes = require('./routes/auth');
+// const ticketRoutes = require('./routes/tickets');
+
+// const app = express();
+
+// // Middlewares
+// app.use(cors({
+//   origin: 'https://helpdskapp.netlify.app',
+//   methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+//   allowedHeaders: ['Content-Type','Authorization'],
+//   credentials: true
+// }));
+// app.use(express.json());
+
+// // Routes
+// app.use('/api/auth', authRoutes);
+// app.use('/api/tickets', ticketRoutes);
+
+// // Health check
+// app.get('/api/health', (req, res) => {
+//   res.status(200).json({ message: 'Server running fine!' });
+// });
+
+// // Export app only
+// module.exports = app;
+
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
@@ -94,13 +124,38 @@ const ticketRoutes = require('./routes/tickets');
 
 const app = express();
 
+// Allowed frontends
+const allowedOrigins = [
+  'https://helpdsk.netlify.app',
+  'https://helpdskapp.netlify.app' // your current frontend
+];
+
 // Middlewares
 app.use(cors({
-  origin: 'https://helpdsk.netlify.app',
+  origin: function(origin, callback) {
+    if(!origin) return callback(null, true); // Postman, mobile, etc.
+    if(!allowedOrigins.includes(origin)) {
+      return callback(new Error('Not allowed by CORS'), false);
+    }
+    return callback(null, true);
+  },
   methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization'],
   credentials: true
 }));
+
+// Preflight requests handling
+app.use((req, res, next) => {
+  if (allowedOrigins.includes(req.headers.origin)) {
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') return res.sendStatus(200);
+  next();
+});
+
+// Body parser
 app.use(express.json());
 
 // Routes

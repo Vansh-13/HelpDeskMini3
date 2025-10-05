@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 
-const API_URL = 'https://help-desk-mini3-o8fu-ihwkb1dvc-vansh-13s-projects.vercel.app/api';
+const API_URL = 'https://helpdeskmini3-1.onrender.com/api';
+
 
 const getAuthHeaders = () => ({
   headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
