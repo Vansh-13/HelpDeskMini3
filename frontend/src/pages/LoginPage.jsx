@@ -19,7 +19,13 @@ export default function LoginPage() {
     }
 
     try {
-      const res = await axios.post(`${API_URL}/auth/login`, { email, password });
+      const res = await axios.post(
+  `${API_URL}/auth/login`,
+  { email, password },
+  { withCredentials: true } // ✅ add this line
+);
+
+      // const res = await axios.post(`${API_URL}/auth/login`, { email, password });
       localStorage.setItem('token', res.data.token);
       toast.success('Login successful!');
       navigate('/tickets');

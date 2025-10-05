@@ -21,7 +21,13 @@ export default function RegisterPage() {
     }
 
     try {
-      await axios.post(`${API_URL}/auth/register`, { username, email, password, role });
+      await axios.post(
+  `${API_URL}/auth/register`,
+  { username, email, password, role },
+  { withCredentials: true } // ✅ add this line
+);
+
+      // await axios.post(`${API_URL}/auth/register`, { username, email, password, role });
       toast.success('User registered successfully! Please login.');
       navigate('/login');
     } catch (err) {
