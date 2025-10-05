@@ -11,7 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 /* ✅ Fix 1: Handle preflight OPTIONS requests early */
-app.options('*', cors());
+// app.options('*', cors());
 
 /* ✅ Fix 2: Use CORS for your frontend domain */
 app.use(cors({
