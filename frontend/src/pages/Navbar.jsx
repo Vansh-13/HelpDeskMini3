@@ -10,6 +10,7 @@ export default function Navbar() {
   }
 
   const [showDropdown, setShowDropdown] = useState(false);
+  const [mobileMenu, setMobileMenu] = useState(false);
   const dropdownRef = useRef();
 
   useEffect(() => {
@@ -31,7 +32,14 @@ export default function Navbar() {
     <nav style={navStyle}>
       <div style={logoStyle}>HelpDesk Mini</div>
 
-      <div style={linksContainer}>
+      {/* Hamburger button for mobile */}
+      <div style={hamburgerStyle} onClick={() => setMobileMenu(prev => !prev)}>
+        <div style={barStyle}></div>
+        <div style={barStyle}></div>
+        <div style={barStyle}></div>
+      </div>
+
+      <div style={{ ...linksContainer, ...(mobileMenu ? mobileLinksMobileStyle : linksDesktopStyle) }}>
         <a href="/tickets" style={linkStyle}>Tickets</a>
         <a href="/tickets/new" style={linkStyle}>New Ticket</a>
 
@@ -63,20 +71,20 @@ export default function Navbar() {
   );
 }
 
-// Navbar styles
+// Styles
 const navStyle = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
   padding: '12px 24px',
-  backgroundColor: 'rgba(30, 41, 59, 0.75)',
+  backgroundColor: 'rgba(30, 41, 59, 0.9)',
   backdropFilter: 'blur(12px)',
   boxShadow: '0 6px 18px rgba(0,0,0,0.3)',
   fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
   position: 'sticky',
   top: 0,
   zIndex: 1000,
-  transition: 'all 0.3s ease'
+  flexWrap: 'wrap'
 };
 
 const logoStyle = {
@@ -89,9 +97,45 @@ const logoStyle = {
 const linksContainer = {
   display: 'flex',
   alignItems: 'center',
-  gap: '20px',
-  flexWrap: 'wrap'
+  gap: '16px',
 };
+
+// Desktop links style
+const linksDesktopStyle = {
+  flexDirection: 'row',
+};
+
+// Mobile menu style
+const mobileLinksMobileStyle = {
+  flexDirection: 'column',
+  width: '100%',
+  marginTop: '12px',
+  backgroundColor: 'rgba(30,41,59,0.95)',
+  borderRadius: '8px',
+  padding: '12px',
+  gap: '12px',
+};
+
+// Hamburger
+const hamburgerStyle = {
+  display: 'none', // default hidden
+  flexDirection: 'column',
+  cursor: 'pointer',
+  gap: '4px',
+};
+
+// Hamburger bars
+const barStyle = {
+  width: '24px',
+  height: '3px',
+  backgroundColor: '#f3f4f6',
+  borderRadius: '2px'
+};
+
+// Show hamburger on small devices
+if (window.innerWidth < 768) {
+  hamburgerStyle.display = 'flex';
+}
 
 const linkStyle = {
   color: '#f3f4f6',
@@ -102,10 +146,6 @@ const linkStyle = {
   cursor: 'pointer',
   transition: 'all 0.25s ease',
   userSelect: 'none',
-  backgroundColor: 'transparent',
-};
-linkStyle[':hover'] = {
-  backgroundColor: 'rgba(255,255,255,0.1)',
 };
 
 const profileStyle = {
@@ -119,9 +159,6 @@ const profileStyle = {
   fontWeight: '600',
   color: '#f3f4f6',
   transition: 'all 0.3s ease',
-};
-profileStyle[':hover'] = {
-  backgroundColor: 'rgba(255,255,255,0.25)',
 };
 
 const avatarStyle = {
@@ -163,7 +200,4 @@ const dropdownBtnStyle = {
   fontWeight: '700',
   cursor: 'pointer',
   transition: 'all 0.3s ease',
-};
-dropdownBtnStyle[':hover'] = {
-  backgroundColor: '#dc2626'
 };
